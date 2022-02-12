@@ -1,32 +1,40 @@
 # d3
-Visualization of Ipsos poll data
+Visualization of Ipsos poll data using d3, implemented using NodeJS
 
-## Getting started:
-
-With the npm package manger:
+## Demo:
+in the site/ folder, run the following command:
 ```bash
-npm install d3
+node server.js
+```
+And visit [http://localhost:3000](http://localhost:3000) in your web browser.
+
+## Installation and Setup Instructions
+Install the required packaged with With the npm package manger:
+```bash
+npm install d3 jquery @popperjs/core bootstrap express
 ```
 
 https://github.com/d3/d3
 
-Setting up a basic web server:
+Setting up a basic web server with express, and loading the required scripts from a local copy retrieved with node js:
 
 ```javascript 
-const http = require('http');
+console.log('server is starting');
 
-const hostname = '127.0.0.1';
-const port = 3000;
+var express = require('express');
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
-});
+var app = express();
+app.use('/bootstrap/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+app.use('/bootstrap/js', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
+app.use('/jquery/', express.static(__dirname + '/node_modules/jquery/dist'));
+app.use('/@popperjs/core/dist/umd', express.static(__dirname + '/node_modules/@popperjs/core/dist/umd'));
+app.use(express.static('public'));
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+var server = app.listen(3000, listening);
+
+function listening(){
+    console.log(listening);
+}
+
 ```
 
-https://nodejs.org/en/docs/guides/getting-started-guide/
