@@ -1,0 +1,28 @@
+.jumbotron{
+    background-color: #002752;
+}
+
+.jumbotron h1{
+    color: whitesmoke;
+}
+
+.jumbotron p{
+    color: white;
+}
+
+.line {
+    fill: none;
+    stroke: #2B4999;
+    stroke-width: 3;
+  }
+
+.card-body{
+    width: 100%;
+}
+
+#chart {
+    text-align: center;
+    margin-top: 40px;
+    width: 100%;
+
+  }

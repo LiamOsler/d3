@@ -6,18 +6,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/main.css">
+
 
     <title>Hello, world!</title>
   </head>
   <body>
+
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">CORONAVIRUS - ONE YEAR ON</h1>
+        <h1 class="display-2"><b>TRACKING UK PUBLIC PERCEPTION</b></h1>
+        <p class="lead">A snapshot of Ipsos MORI's research and analysis related to the COVID-19 coronavirus pandemic, one year after the first UK lockdown was announced.</p>
+        <p class="lead">25<sup>th</sup> March 2021</p>
+        <p>For more information visit:</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class = "row">
+        <div class="card-group">
+          
+          <div class = "col-12 col-lg-6">
+            <div class="card">
+              <div class="card-body">
+                <div class = "row">
+                  <div class = "col-3">
+                    <h5 class="card-title">PLANNING NHS RESPONSE</h5>
+                    <p class="card-text">Confidence in the NHS is at its highest since June 2020</p>
+                  </div>
+                  <div class = "col-9">
+                    <div id= "chart"></div>
+                  </div>
+                </div>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              </div>
+            </div>
+          </div>
+
+          <div class = "col-12 col-lg-6">
+            <div class="card">
+              <div class="card-body">
+                <div class = "row">
+                  <div class = "col-3">
+                    <h5 class="card-title">PLANNING NHS RESPONSE</h5>
+                    <p class="card-text">Confidence in the NHS is at its highest since June 2020</p>
+                  </div>
+                  <div class = "col-9">
+                    <div id= "chart"></div>
+                  </div>
+                </div>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>  
+    </div>
     
-    <h1>Hello, world!</h1>
+    
 
     <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS and d3 -->
     <script src="/jquery/jquery.min.js"></script>
-    <script src="/@popperjs/core/dist/umd/popper.min.js" ></script>
-    <script src="/bootstrap/js/bootstrap.min.js" ></script>
+    <script src="/@popperjs/popper.min.js" ></script>
+    <script src="/bootstrap/bootstrap.min.js" ></script>
+    <script src="/d3/d3.js" ></script>
+
+    <script>
+    // set the dimensions and margins of the graph
+    var margin = {top: 10, right: 30, bottom: 30, left: 50},
+        width = 1000 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+
+    var parseTime = d3.timeParse("%d-%b-%y");
+
+    var x = d3.scaleTime().range([0, width]);
+    var y = d3.scaleLinear().range([height, 0]);
+
+    var valueline = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.close); });
+
+
+    // append the svg object to the body of the page
+    var svg = d3.select("#chart")
+      .append("svg")
+        .attr("viewBox", `0 0 1000 400`)
+        .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+
+
+    d3.json("/data/data.json").then(function(data) {      
+      console.log(data);
+      
+      // format the data
+      data.forEach(function(d) {
+          d.date = parseTime(d.date);
+          d.close = +d.close;
+      });
+      
+      x.domain(d3.extent(data, function(d) { return d.date; }));
+      y.domain([0, d3.max(data, function(d) { return d.close; })]);
+
+      svg.append("path")
+        .data([data])
+        .attr("class", "line")
+        .attr("d", valueline);
+
+      svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+        // Add the y Axis
+      svg.append("g")
+          .call(d3.axisLeft(y));
+
+        });
+      
+    </script>
+
   </body>
 </html>
