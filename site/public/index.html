@@ -13,7 +13,6 @@
     <title>Hello, world!</title>
   </head>
   <body>
-test
     <div class="jumbotron jumbotron-fluid pb-1 pt-4">
       <div class="container">
         <h1 class="display-4">CORONAVIRUS - ONE YEAR ON</h1>
@@ -83,7 +82,7 @@ test
                     <img src="images/vial.png" alt = "A pair of eyes and part of a face looking at the viewer"/>
                   </div>
                   <div class = "col-8 pt-4">
-                    <p class="card-text">If a vaccine for COVID-19 were available to me, I tould get it</p>
+                    <p class="card-text">If a vaccine for COVID-19 were available to me, I would get it</p>
                     <div id= "chart3"></div>
                   </div>
                 </div>
@@ -193,7 +192,7 @@ test
 
     <script>
     // set the dimensions and margins of the graph
-    var margin = {top: 10, right: 150, bottom:  100, left: 50},
+    var margin = {top: 10, right: 150, bottom:  100, left: 60},
         width = 500 - margin.left - margin.right,
         height = 250 - margin.top - margin.bottom,
         tooltip = { width: 100, height: 100, x: 10, y: -30 };
@@ -209,12 +208,12 @@ test
     // define the 1st line
     var valueline = d3.line()
         .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.close); });
+        .y(function(d) { return y(d.no); });
 
     // define the 2nd line
     var valueline2 = d3.line()
         .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.open); });
+        .y(function(d) { return y(d.yes); });
 
     var div = d3.select("body").append("div")
     .attr("class", "tooltip")
@@ -230,13 +229,13 @@ test
               "translate(" + margin.left + "," + margin.top + ")");
 
 
-    d3.json("/data/data.json").then(function(data) {      
+    d3.json("/data/nhs-response.json").then(function(data) {      
       console.log(data);
       
       // format the data
       data.forEach(function(d) {
           d.date = parseTime(d.date);
-          d.close = +d.close;
+          d.yes = +d.yes;
       });
       
       x.domain(d3.extent(data, function(d) { return d.date; }));
@@ -252,19 +251,20 @@ test
       // add the dots with tooltips
       svg.selectAll("dot")
         .data(data)
+        .attr("class", "point")
       .enter().append("circle")
         .style("stroke", "#294B96")
         .style("fill", "#294B96")
         .attr("r", 5)
         .attr("cx", function(d) { return x(d.date); })
-        .attr("cy", function(d) { return y(d.close); })
+        .attr("cy", function(d) { return y(d.no); })
         .on("mouseover", function(event,d) {
           div.transition()
             .duration(100)
             .style("opacity", 1)
             .style("color", "#294B96");
 
-          div.html(formatTime(d.date) + "<br/>" + formatPercent(d.close) +" Not Confident")
+          div.html(formatTime(d.date) + "<br/>" + formatPercent(d.no) +" Not Confident")
             .style("left", (event.pageX) + "px")
             .style("top", (event.pageY - 28) + "px");
           })
@@ -285,18 +285,19 @@ test
         // add the dots with tooltips
       svg.selectAll("dot")
         .data(data)
+        .attr("class", "point")
       .enter().append("circle")
         .style("stroke", "#4E9B9A")
         .style("fill", "#4E9B9A")
         .attr("r", 5)
         .attr("cx", function(d) { return x(d.date); })
-        .attr("cy", function(d) { return y(d.open); })
+        .attr("cy", function(d) { return y(d.yes); })
         .on("mouseover", function(event,d) {
           div.transition()
             .duration(200)
             .style("opacity", 1)
             .style("color", "#4E9B9A");
-          div.html(formatTime(d.date) + "<br/>" + formatPercent(d.open)  +" Confident")
+          div.html(formatTime(d.date) + "<br/>" + formatPercent(d.yes)  +" Confident")
             .style("left", (event.pageX) + "px")
             .style("top", (event.pageY - 28) + "px");
           })
@@ -368,9 +369,54 @@ test
   
       });
 
+      // append the svg object to the body of the page
+      var svg2 = d3.select("#chart3")
+        .append("svg")
+          .attr("viewBox", `0 -50 500 400`)
+          .append("g")
+          .attr("transform",
+                "translate(" + 0 + "," + 0 + ")");
 
-
+ 
+          var data = [.08, .09, .18, .65];
+          var colors = ["#022355", "#30469c", "#317372", "#224c4e"];
+          var myColor = d3.scaleLinear().domain([1,10]).range(["#294B96", "#69b3a2"]);
           
+          
+          let g = svg2.append("g")
+            .attr("transform", "translate(200,150)");
+            
+          // Creating Pie generator
+          var pie = d3.pie();
+
+          // Creating arc
+          var arc = d3.arc()
+                      .innerRadius(110)
+                      .outerRadius(180);
+
+          // Grouping different arcs
+          var arcs = g.selectAll("arc")
+                      .data(pie(data))
+                      .enter()
+                      .append("g");
+
+          // Appending path 
+          arcs.append("path")
+              .attr("fill", (data, i)=>{
+                  let value=data.data;
+                  return colors[i]
+              })
+              .attr("d", arc);
+
+          arcs.append("svg:text")                                     //add a label to each slice
+                .attr("transform", function(d) {                    //set the label's origin to the center of the arc
+                //we have to make sure to set these before calling arc.centroid
+                d.innerRadius = 0;
+                d.outerRadius = r;
+                return "translate(" + arc.centroid(d) + ")";        //this gives us a pair of coordinates like [50, 50]
+            })
+            .attr("text-anchor", "middle")                          //center the text on it's origin
+            .text(function(d, i) { return data[i].value; });      //get the label from our original data array
       
     </script>
 

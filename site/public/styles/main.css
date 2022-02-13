@@ -56,7 +56,6 @@ img{
 
 #chart {
     text-align: center;
-    margin-top: 40px;
     width: 100%;
 
   }
@@ -76,7 +75,7 @@ img{
 .sidebar{
     padding: 0;
     position:relative;
-    min-height: 360px;
+    min-height: 350px;
 
 }
 
@@ -111,20 +110,16 @@ img{
 }
 
 .line{
-    stroke-width: 7;
+    stroke-width: 12;
     transition: 0.3s;
 
 }
 
-.line:hover {
-    stroke-width: 12;
-}
-
 div.tooltip {
     position: absolute;
-    padding: 2px;
+    padding: .1em;
+    margin-left: 1em;
     background: rgba(233, 232, 237, 0.8);
-    border: 0px;
     border-radius: 8px;
     pointer-events: none;
   }
