@@ -29,7 +29,7 @@ app.use('/jquery/', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/@popperjs/', express.static(__dirname + '/node_modules/@popperjs/core/dist/umd'));
 app.use('/bootstrap/', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/bootstrap/', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
-app.use('/d3/js/', express.static(__dirname + '/node_modules/d3/dist'));
+app.use('/d3/', express.static(__dirname + '/node_modules/d3/dist'));
 app.use(express.static('public'));
 
 var server = app.listen(3000, listening);
@@ -61,8 +61,28 @@ function listening(){
     <script src="/jquery/jquery.min.js"></script>
     <script src="/@popperjs/popper.min.js" ></script>
     <script src="/bootstrap/bootstrap.min.js" ></script>
-    <script src="/d3/js/d3.js" ></script>
+    <script src="/d3/d3.js" ></script>
   </body>
 </html>
 ```
 
+Creating cards:
+
+```html
+  <div class = "col-12 col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <div class = "row">
+          <div class = "col-3">
+            <h5 class="card-title">PLANNING NHS RESPONSE</h5>
+            <p class="card-text">Confidence in the NHS is at its highest since June 2020</p>
+          </div>
+          <div class = "col-9">
+            <div id= "chart"></div>
+          </div>
+        </div>
+        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      </div>
+    </div>
+  </div>
+```
