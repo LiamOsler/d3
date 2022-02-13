@@ -102,16 +102,14 @@
                     </div>
                     <img src="images/eyes.png" alt = "A picture of a home testing kit"/>
                   </div>
-                  <div class = "col-8">
-                    <div class = "col-8 pt-4">
-                      <p class="card-text">What level of threat do you think the the coronavirus poses to...?</p>
+                    <div class = "col-8 p-3 pt-4">
+                      <p class="card-text">What level of threat do you think that the coronavirus poses to...?</p>
                       <div id= "chart4"></div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
           <div class = "col-12 col-lg-6 p-3">
             <div class="card">
@@ -197,7 +195,6 @@
         height = 250 - margin.top - margin.bottom,
         tooltip = { width: 100, height: 100, x: 10, y: -30 };
 
-    
     var formatPercent = d3.format(".0%");
     var parseTime = d3.timeParse("%d-%b-%y");
     var formatTime = d3.timeFormat("%e %B");
@@ -210,10 +207,20 @@
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.no); });
 
-    // define the 2nd line
+    // define the 3rd line
     var valueline2 = d3.line()
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.yes); });
+
+    // define the 4th line
+    var valueline3 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.personally); });
+
+    // define the 2nd line
+    var valueline4 = d3.line()
+        .x(function(d) { return x(d.date); })
+        .y(function(d) { return y(d.country); });
 
     var div = d3.select("body").append("div")
     .attr("class", "tooltip")
@@ -223,7 +230,7 @@
     // append the svg object to the body of the page
     var svg = d3.select("#chart")
       .append("svg")
-        .attr("viewBox", `0 0 500 250`)
+        .attr("viewBox", `0 0 500 300`)
         .append("g")
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
@@ -366,59 +373,153 @@
         .attr('width', 10)
         .attr('height', 40)
         .attr('fill', '#294B96');
-  
       });
 
       // append the svg object to the body of the page
       var svg2 = d3.select("#chart3")
         .append("svg")
-          .attr("viewBox", `0 -50 500 400`)
-          .append("g")
-          .attr("transform",
-                "translate(" + 0 + "," + 0 + ")");
+        .attr("viewBox", `0 -50 500 400`)
+        .append("g")
+        .attr("transform",
+              "translate(" + 0 + "," + -10 + ")");
 
- 
-          var data = [.08, .09, .18, .65];
-          var colors = ["#022355", "#30469c", "#317372", "#224c4e"];
-          var myColor = d3.scaleLinear().domain([1,10]).range(["#294B96", "#69b3a2"]);
-          
-          
-          let g = svg2.append("g")
-            .attr("transform", "translate(200,150)");
-            
-          // Creating Pie generator
-          var pie = d3.pie();
+      var data = [.08, .09, .18, .65];
+      var colors = ["#022355", "#30469c", "#317372", "#224c4e"];
+      var myColor = d3.scaleLinear().domain([1,10]).range(["#294B96", "#69b3a2"]);
+      
+      let g = svg2.append("g")
+        .attr("transform", "translate(200,150)");
 
-          // Creating arc
-          var arc = d3.arc()
-                      .innerRadius(110)
-                      .outerRadius(180);
+      svg2.append("text")
+        .attr("x", 210)
+        .attr("y", 100)
+        .text("83%")
+        .attr("text-align","center")
+        .attr("alignment-baseline","middle")
+        .attr("font-size", "3em")
+        .attr("text-anchor", "middle")
+        .style('fill', '#224c4e');
 
-          // Grouping different arcs
-          var arcs = g.selectAll("arc")
-                      .data(pie(data))
-                      .enter()
-                      .append("g");
+      svg2.append("text")
+        .attr("x", 200)
+        .attr("y", 140)
+        .text("in the UK agree")
+        .attr("text-align","center")
+        .attr("alignment-baseline","middle")
+        .attr("font-size", "1.5em")
+        .attr("text-anchor", "middle")
+        .style('fill', '#224c4e');
 
-          // Appending path 
-          arcs.append("path")
-              .attr("fill", (data, i)=>{
-                  let value=data.data;
-                  return colors[i]
-              })
-              .attr("d", arc);
+      svg2.append("text")
+        .attr("x", 200)
+        .attr("y", 170)
+        .text("they would get")
+        .attr("text-align","center")
+        .attr("alignment-baseline","middle")
+        .attr("font-size", "1.5em")
+        .attr("text-anchor", "middle")
+        .style('fill', '#224c4e');
+        
+      svg2.append("text")
+        .attr("x", 200)
+        .attr("y", 200)
+        .text("a vaccine")
+        .attr("text-align","center")
+        .attr("alignment-baseline","middle")
+        .attr("font-size", "1.5em")
+        .attr("text-anchor", "middle")
+        .style('fill', '#224c4e');
+        
+      // Creating Pie generator
+      var pie = d3.pie();
 
-          arcs.append("svg:text")                                     //add a label to each slice
-                .attr("transform", function(d) {                    //set the label's origin to the center of the arc
-                //we have to make sure to set these before calling arc.centroid
-                d.innerRadius = 0;
-                d.outerRadius = r;
-                return "translate(" + arc.centroid(d) + ")";        //this gives us a pair of coordinates like [50, 50]
-            })
-            .attr("text-anchor", "middle")                          //center the text on it's origin
-            .text(function(d, i) { return data[i].value; });      //get the label from our original data array
+      // Creating arc
+      var arc = d3.arc()
+                  .innerRadius(110)
+                  .outerRadius(160);
+
+      // Grouping different arcs
+      var arcs = g.selectAll("arc")
+                  .data(pie(data))
+                  .enter()
+                  .append("g");
+
+      // Appending path 
+      arcs.append("path")
+        .attr("fill", (data, i)=>{
+            let value=data.data;
+            return colors[i]
+        })
+        .attr("d", arc);
+
+      // set the dimensions and margins of the graph
+      margin = {top: 10, right: 0, bottom:  100, left: 0},
+      
+      x = d3.scaleTime().range([0, width]);
+      y = d3.scaleLinear().range([height, 0]);
+      
+
+      // append the svg object to the body of the page
+      var svg3 = d3.select("#chart4")
+        .append("div")
+        .classed("svg-container", true) //container class to make it responsive
+        .append("svg")
+        //responsive SVG needs these 2 attributes and no width and height attr
+        .attr("viewBox", "0 0 300 200")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+      
+      d3.json("/data/threat-perception.json").then(function(data) {   
+          // format the data
+        data.forEach(function(d) {
+            d.date = parseTime(d.date);
+            d.yes = +d.yes;
+        });
+        
+        x.domain(d3.extent(data, function(d) { return d.date; }));
+        y.domain([0, 1]);
+
+        svg3.append("path")
+          .data([data])
+          .attr("class", "line-2")
+          .attr("d", valueline3);
+
+        svg3.append("path")
+          .data([data])
+          .attr("class", "line")
+          .attr("class", "line-2")
+          .style("stroke", "#4E9B9A")
+          .attr("d", valueline4);
+
+        svg3.append("g")
+          .attr("class", "axis")
+          .attr("transform", "translate(0, 150)")
+          .call(d3.axisBottom(x)
+          .ticks(3)
+          .tickFormat(d3.timeFormat("%b - %Y")))
+          .style('font-size', '.5em');
+
+
+        svg3.append("text")
+          .attr("x", 0)
+          .attr("y", 10)
+          .text("% 'very high' + ")
+          .attr("alignment-baseline","middle")
+          .style('font-size', '.5em')
+          .style('font-weight', 'bold')
+          .style('fill', '#294B96');
+        
+        svg3.append("text")
+          .attr("x", 0)
+          .attr("y", 20)
+          .text("% 'high' threat")
+          .attr("alignment-baseline","middle")
+          .style('font-size', '.5em')
+          .style('font-weight', 'bold')
+          .style('fill', '#294B96');
+      });
+      
       
     </script>
-
   </body>
 </html>

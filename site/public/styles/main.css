@@ -15,8 +15,13 @@
 .line {
     fill: none;
     stroke: #2B4999;
-    stroke-width: 3;
   }
+
+.line-2 {
+    fill: none;
+    stroke: #2B4999;
+    stroke-width: 8;
+}
 
 /* Card Styling */
 
@@ -51,7 +56,6 @@ img{
 .card p{
     color: #2B4999;
     font-weight: bolder;
-    font-size: 0.75em;
 }
 
 #chart {
@@ -59,6 +63,10 @@ img{
     width: 100%;
 
   }
+
+#chart4{
+    width: 100%;
+}
 
 .sources{
     background-color: rgba(0,0,0,0);
@@ -75,7 +83,7 @@ img{
 .sidebar{
     padding: 0;
     position:relative;
-    min-height: 350px;
+    min-height: 410px;
 
 }
 
@@ -111,8 +119,10 @@ img{
 
 .line{
     stroke-width: 12;
-    transition: 0.3s;
+}
 
+.line-2{
+    stroke-width: 2;
 }
 
 div.tooltip {
@@ -122,4 +132,4 @@ div.tooltip {
     background: rgba(233, 232, 237, 0.8);
     border-radius: 8px;
     pointer-events: none;
-  }
+}
