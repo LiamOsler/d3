@@ -38,7 +38,7 @@
                     </div>
                     <img src="images/NHS-logo.png" alt = "A picture of the NHS logo">
                   </div>
-                  <div class = "col-8 pt-4">
+                  <div class = "col-8 p-3">
                     <p class="card-text">How confident, if at all, would you say you are in the ability of the NHS to deal with those who are ill as a result of getting the Coronavirus?</p>
                     <div id= "chart"></div>
                     <p>Find out more here: <a href = "https://www.ipsos.com/en-uk/confidence-ability-nhs-deal-covid-19-its-highest-last-june"> https://www.ipsos.com/en-uk/confidence-ability-nhs-deal-covid-19-its-highest-last-june</a></p>
@@ -193,18 +193,32 @@
 
     <script>
     // set the dimensions and margins of the graph
-    var margin = {top: 10, right: 30, bottom: 50, left: 50},
+    var margin = {top: 10, right: 150, bottom:  100, left: 50},
         width = 500 - margin.left - margin.right,
-        height = 250 - margin.top - margin.bottom;
+        height = 250 - margin.top - margin.bottom,
+        tooltip = { width: 100, height: 100, x: 10, y: -30 };
 
+    
+    var formatPercent = d3.format(".0%");
     var parseTime = d3.timeParse("%d-%b-%y");
+    var formatTime = d3.timeFormat("%e %B");
 
     var x = d3.scaleTime().range([0, width]);
     var y = d3.scaleLinear().range([height, 0]);
 
+    // define the 1st line
     var valueline = d3.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.close); });
+        .x(function(d) { return x(d.date); })
+        .y(function(d) { return y(d.close); });
+
+    // define the 2nd line
+    var valueline2 = d3.line()
+        .x(function(d) { return x(d.date); })
+        .y(function(d) { return y(d.open); });
+
+    var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
 
 
     // append the svg object to the body of the page
@@ -226,28 +240,137 @@
       });
       
       x.domain(d3.extent(data, function(d) { return d.date; }));
-      y.domain([0, d3.max(data, function(d) { return d.close; })]);
+      y.domain([0, 1]);
+      
 
+      // Add the valueline path.
       svg.append("path")
         .data([data])
         .attr("class", "line")
         .attr("d", valueline);
 
+      // add the dots with tooltips
+      svg.selectAll("dot")
+        .data(data)
+      .enter().append("circle")
+        .style("stroke", "#294B96")
+        .style("fill", "#294B96")
+        .attr("r", 5)
+        .attr("cx", function(d) { return x(d.date); })
+        .attr("cy", function(d) { return y(d.close); })
+        .on("mouseover", function(event,d) {
+          div.transition()
+            .duration(100)
+            .style("opacity", 1)
+            .style("color", "#294B96");
+
+          div.html(formatTime(d.date) + "<br/>" + formatPercent(d.close) +" Not Confident")
+            .style("left", (event.pageX) + "px")
+            .style("top", (event.pageY - 28) + "px");
+          })
+        .on("mouseout", function(d) {
+          div.transition()
+            .duration(500)
+            .style("opacity", 0);
+          });
+
+
+      // Add the valueline2 path.
+      svg.append("path")
+        .data([data])
+        .attr("class", "line")
+        .style("stroke", "#4E9B9A")
+        .attr("d", valueline2);
+
+        // add the dots with tooltips
+      svg.selectAll("dot")
+        .data(data)
+      .enter().append("circle")
+        .style("stroke", "#4E9B9A")
+        .style("fill", "#4E9B9A")
+        .attr("r", 5)
+        .attr("cx", function(d) { return x(d.date); })
+        .attr("cy", function(d) { return y(d.open); })
+        .on("mouseover", function(event,d) {
+          div.transition()
+            .duration(200)
+            .style("opacity", 1)
+            .style("color", "#4E9B9A");
+          div.html(formatTime(d.date) + "<br/>" + formatPercent(d.open)  +" Confident")
+            .style("left", (event.pageX) + "px")
+            .style("top", (event.pageY - 28) + "px");
+          })
+        .on("mouseout", function(d) {
+          div.transition()
+            .duration(500)
+            .style("opacity", 0);
+          });
+
       svg.append("g")
         .attr("class", "axis")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x).ticks(10))
+        .call(d3.axisBottom(x)
+          .tickFormat(d3.timeFormat("%b-%Y")))
         .selectAll("text")	
           .style("text-anchor", "end")
           .attr("dx", "-.8em")
           .attr("dy", ".15em")
-          .attr("transform", "rotate(-65)");
+          .attr("transform", "rotate(-90)");
 
       // Add the y Axis
       svg.append("g")
-          .call(d3.axisLeft(y)
-          );
-        });
+        .attr("class", "axis")
+        .call(d3.axisLeft(y)
+        .ticks(5)
+        .tickFormat(formatPercent));
+
+      svg.append("text")
+        .attr("x", 340)
+        .attr("y", 30)
+        .text("79%")
+        .attr("alignment-baseline","middle")
+        .style('fill', '#69b3a2');
+
+      svg.append("text")
+        .attr("x", 340)
+        .attr("y", 50)
+        .text("Confident")
+        .attr("alignment-baseline","middle")
+        .style('fill', '#69b3a2');
+        
+      svg.append('rect')
+        .attr('x', 320)
+        .attr('y', 20)
+        .attr('width', 10)
+        .attr('height', 40)
+        .attr('fill', '#69b3a2');
+
+      svg.append("text")
+        .attr("x", 340)
+        .attr("y", 90)
+        .text("17%")
+        .attr("alignment-baseline","middle")
+        .style('fill', '#294B96');
+
+      svg.append("text")
+        .attr("x", 340)
+        .attr("y", 110)
+        .text("Not Confident")
+        .attr("alignment-baseline","middle")
+        .style('fill', '#294B96');
+        
+      svg.append('rect')
+        .attr('x', 320)
+        .attr('y', 80)
+        .attr('width', 10)
+        .attr('height', 40)
+        .attr('fill', '#294B96');
+  
+      });
+
+
+
+          
       
     </script>
 

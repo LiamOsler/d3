@@ -2,7 +2,8 @@
 Visualization of Ipsos poll data using d3, implemented using NodeJS
 
 ## Demo:
-in the site/ folder, run the following command:
+in the site/ directory, run the following command:
+
 ```bash
 node server.js
 ```
@@ -10,6 +11,7 @@ And visit [http://localhost:3000](http://localhost:3000) in your web browser.
 
 ## Installation and Setup Instructions
 Install the required packaged with With the npm package manger:
+
 ```bash
 npm install d3 jquery @popperjs/core bootstrap express
 ```
@@ -86,3 +88,8 @@ Creating cards:
     </div>
   </div>
 ```
+
+
+Sources:
+
+https://www.d3-graph-gallery.com/graph/line_cursor.html

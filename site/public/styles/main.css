@@ -1,3 +1,5 @@
+
+
 /* Jumbotron Styling */
 
 .jumbotron{
@@ -49,6 +51,7 @@ img{
 .card p{
     color: #2B4999;
     font-weight: bolder;
+    font-size: 0.75em;
 }
 
 #chart {
@@ -73,7 +76,7 @@ img{
 .sidebar{
     padding: 0;
     position:relative;
-    min-height: 430px;
+    min-height: 360px;
 
 }
 
@@ -100,4 +103,28 @@ img{
 .axis path, .axis line {
     fill: none;
     stroke: none;
+}
+
+.axis{
+    color: #294B96;
+    font-size: 1.1em;
+}
+
+.line{
+    stroke-width: 7;
+    transition: 0.3s;
+
+}
+
+.line:hover {
+    stroke-width: 12;
+}
+
+div.tooltip {
+    position: absolute;
+    padding: 2px;
+    background: rgba(233, 232, 237, 0.8);
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
   }
