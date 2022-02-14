@@ -1,47 +1,41 @@
 # d3.js Data Visualization
 Visualization of Ipsos poll data using d3, implemented using NodeJS
 
-## Demo:
-in the site/ directory, run the following command:
+
+## Setup:
+In the ```site``` directory, run the following command:
 
 ```bash
 node server.js
 ```
-And visit [http://localhost:3000](http://localhost:3000) in your web browser.
 
-## Installation and Setup Instructions
+A local server using ```express``` will run, visit [http://localhost:3000](http://localhost:3000) in your web browser.
+
+## Minimal Installation and Setup Instructions
+Clone the repository from github:
+
+```bash
+git clone https://github.com/LiamOsler/d3
+```
+
 Install the required packaged with With the npm package manger:
-
 ```bash
 npm install d3 jquery @popperjs/core bootstrap express
 ```
 
 https://github.com/d3/d3
 
-Setting up a basic web server with express, and loading the required scripts from a local copy retrieved with node js:
 
-### server.js:
-```javascript 
-console.log('server is starting');
 
-var express = require('express');
+## Requirements:
+- NodeJS
 
-var app = express();
-app.use('/jquery/', express.static(__dirname + '/node_modules/jquery/dist'));
-app.use('/@popperjs/', express.static(__dirname + '/node_modules/@popperjs/core/dist/umd'));
-app.use('/bootstrap/', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
-app.use('/bootstrap/', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
-app.use('/d3/', express.static(__dirname + '/node_modules/d3/dist'));
-app.use(express.static('public'));
-
-var server = app.listen(3000, listening);
-
-function listening(){
-    console.log("listening");
-}
-```
-
-### index.html:
+### Dependencies:
+- D3: [https://github.com/d3/d3](https://github.com/d3/d3)
+- Express: [https://github.com/expressjs/express](https://github.com/expressjs/express)
+- jQuery
+- Bootstrap
+- Popper
 
 ```html
 <!doctype html>
