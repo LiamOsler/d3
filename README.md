@@ -3,7 +3,7 @@ Visualization of Ipsos poll data using d3, implemented using NodeJS
 
 
 ## Setup:
-In the ```site``` directory, run the following command:
+In the ```site/``` directory, run the following command:
 
 ```bash
 node server.js
@@ -11,7 +11,7 @@ node server.js
 
 A local server using ```express``` will run, visit [http://localhost:3000](http://localhost:3000) in your web browser.
 
-## Detailed Setup Instructions
+## Setup from Git Instructions
 Clone the repository from github:
 
 ```bash
@@ -21,6 +21,12 @@ git clone https://github.com/LiamOsler/d3
 In the ```site/``` directory, install the required packaged with with npm:
 ```bash
 npm install d3 jquery @popperjs/core bootstrap express
+```
+
+start the local web server with:
+
+```bash
+node server.js
 ```
 
 ## Requirements:
