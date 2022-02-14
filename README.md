@@ -11,21 +11,17 @@ node server.js
 
 A local server using ```express``` will run, visit [http://localhost:3000](http://localhost:3000) in your web browser.
 
-## Minimal Installation and Setup Instructions
+## Detailed Setup Instructions
 Clone the repository from github:
 
 ```bash
 git clone https://github.com/LiamOsler/d3
 ```
 
-Install the required packaged with With the npm package manger:
+In the ```site/``` directory, install the required packaged with with npm:
 ```bash
 npm install d3 jquery @popperjs/core bootstrap express
 ```
-
-https://github.com/d3/d3
-
-
 
 ## Requirements:
 - NodeJS
@@ -64,24 +60,6 @@ https://github.com/d3/d3
 
 Creating cards:
 
-```html
-  <div class = "col-12 col-lg-6">
-    <div class="card">
-      <div class="card-body">
-        <div class = "row">
-          <div class = "col-3">
-            <h5 class="card-title">PLANNING NHS RESPONSE</h5>
-            <p class="card-text">Confidence in the NHS is at its highest since June 2020</p>
-          </div>
-          <div class = "col-9">
-            <div id= "chart"></div>
-          </div>
-        </div>
-        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-      </div>
-    </div>
-  </div>
-```
 
 
 Sources:
