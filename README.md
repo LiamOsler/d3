@@ -1,8 +1,12 @@
 # d3.js Data Visualization
 Visualization of Ipsos poll data using d3, implemented using NodeJS
 
+## Hosted Version:
 
-## Setup:
+Visit: [http://liamosler.ca/demos/d3](http://liamosler.ca/demos/d3)
+
+
+## Local Setup:
 In the ```site/``` directory, run the following command:
 
 ```bash
