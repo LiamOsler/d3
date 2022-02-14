@@ -4,17 +4,22 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="/styles/main.css">
-
-
-    <title>Hello, world!</title>
+    <title>Covid Perception</title>
   </head>
   <body>
     <div class="jumbotron jumbotron-fluid pb-1 pt-4">
       <div class="container">
+        <div class = "row">
+          <div class = "col-12 col-lg-8">
+
+          </div>
+          <div class = "col-12 col-lg-8">
+            
+          </div>
+        </div>
         <h1 class="display-4">CORONAVIRUS - ONE YEAR ON</h1>
         <h1 class="display-2"><b>TRACKING UK PUBLIC PERCEPTION</b></h1>
         <p class="lead">A snapshot of <b>Ipsos MORI's</b> research and analysis related to the <b>COVID-19</b> coronavirus pandemic, one year after the first UK lockdown was announced.</p>
@@ -62,6 +67,8 @@
                   <div class = "col-8 pt-4">
                     <p class="card-text">COVID-19 home testing study over time</p>
                     <div id= "chart2"></div>
+                    <p><b>165,456 swab results between 4<sup>th</sup> and 23<sup>rd</sup> February, 689 tested positive for COVID-19</b></p>
+
                     <p>Find out more here: <a href = "https://www.ipsos.com/en-uk/final-findings-latest-covid-19-react-1-study-published"> https://www.ipsos.com/en-uk/final-findings-latest-covid-19-react-1-study-published</a></p>
 
                   </div>
@@ -125,6 +132,7 @@
                   </div>
                   <div class = "col-8 pt-4">
                     <p class="card-text">To what extent do you agree or disagree with each of the following? 'I feel like things in my country are out of control right now'</p>
+                    <div class = "chart-title">% 'Strongly agree' + 'Somewhat agree'</div>
                     <div id= "chart5"></div>
                   </div>
                 </div>
@@ -169,7 +177,7 @@
                   </div>
 
                   <div class = "col-4">
-                      <p>@Ipsos | Coronavirus tracking data | March 2021 | Public</p>
+                      <div class = "copyright"><p>@Ipsos | Coronavirus tracking data | March 2021 | Public</p></div>
                   </div>
                 </div>
               </div>
@@ -222,6 +230,11 @@
     var valueline4 = d3.line()
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.country); });
+
+            // define the 2nd line
+    var valueline5 = d3.line()
+        .x(function(d) { return x(d.date); })
+        .y(function(d) { return y(d.agree); });
 
     var div = d3.select("body").append("div")
     .attr("class", "tooltip")
@@ -544,6 +557,14 @@
           .attr('height', 10)
           .attr('fill', '#4E9B9A'); 
 
+        svg4.append("text")
+          .attr("x", 155)
+          .attr("y", 185)
+          .text("You Personally")
+          .attr("alignment-baseline","middle")
+          .style('font-size', '.5em')
+          .style('font-weight', 'bold')
+          .style('fill', '#4E9B9A'); 
 
       // add the dots with tooltips
       svg4.selectAll("dot")
@@ -594,9 +615,199 @@
             .duration(500)
             .style("opacity", 0);
           });
-          
+      });
+
+      
+      // append the svg object to the body of the page
+      var svg5 = d3.select("#chart5")
+        .append("div")
+        .classed("svg-container", true) //container class to make it responsive
+        .append("svg")
+        //responsive SVG needs these 2 attributes and no width and height attr
+        .attr("viewBox", "0 0 300 200")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+      
+      d3.json("/data/control.json").then(function(data) {   
+          // format the data
+        data.forEach(function(d) {
+            d.date = parseTime(d.date);
+            d.agree = +d.agree;
+        });
+        
+        x.domain(d3.extent(data, function(d) { return d.date; }));
+        y.domain([0, 1]);
+
+        svg5.append("path")
+          .data([data])
+          .attr("class", "line-2")
+          .style("stroke", "#4E9B9A")
+          .attr("d", valueline5);
+
+        svg5.append("g")
+          .attr("class", "axis")
+          .attr("transform", "translate(0, 150)")
+          .call(d3.axisBottom(x)
+          .ticks(3)
+          .tickFormat(d3.timeFormat("%b - %Y")))
+          .style('font-size', '.5em');
+
+
+      // add the dots with tooltips
+      svg5.selectAll("dot")
+        .data(data)
+        .attr("class", "point")
+      .enter().append("circle")
+        .style("stroke", "#4E9B9A")
+        .style("fill", "#4E9B9A")
+        .attr("r", 2)
+        .attr("cx", function(d) { return x(d.date); })
+        .attr("cy", function(d) { return y(d.agree); })
+        .on("mouseover", function(event,d) {
+          div.transition()
+            .duration(200)
+            .style("opacity", 3)
+            .style("color", "#294B96");
+          div.html(formatTime(d.date) + "<br/>" + formatPercent(d.agree)  +" Strongly Agree + Somewhat Agree")
+            .style("left", (event.pageX) + "px")
+            .style("top", (event.pageY - 28) + "px");
+          })
+        .on("mouseout", function(d) {
+          div.transition()
+            .duration(500)
+            .style("opacity", 0);
+          });
       });
       
+
+      // append the svg object to the body of the page
+      var svg6 = d3.select("#chart6")
+        .append("div")
+        .classed("svg-container", true) //container class to make it responsive
+        .append("svg")
+        //responsive SVG needs these 2 attributes and no width and height attr
+        .attr("viewBox", "0 0 300 200")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+
+       // Legend Items:
+       svg6.append('rect')
+          .attr('x', 110)
+          .attr('y', 20)
+          .attr('width', 64)
+          .attr('height', 30)
+          .attr('fill', '#294B96');
+        
+        svg6.append("text")
+          .attr("x", 100)
+          .attr("y", 40)
+          .text("1-5 Months")
+          .style('font-size', '.8em')
+          .style('text-anchor', 'end')
+          .style('font-weight', 'bold')
+          .style('fill', '#294B96');
+        
+        svg6.append("text")
+          .attr("x", 210)
+          .attr("y", 40)
+          .text("16%")
+          .style('font-size', '.8em')
+          .style('text-anchor', 'end')
+          .style('font-weight', 'bold')
+          .style('fill', '#294B96');
+      
+        svg6.append("text")
+          .attr("x", 100)
+          .attr("y", 80)
+          .text("6 Months")
+          .style('font-size', '.8em')
+          .style('text-anchor', 'end')
+          .style('font-weight', 'bold')
+          .style('fill', '#294B96');
+        
+        svg6.append("text")
+          .attr("x", 100)
+          .attr("y", 100)
+          .text("to a year")
+          .style('font-size', '.8em')
+          .style('text-anchor', 'end')
+          .style('font-weight', 'bold')
+          .style('fill', '#294B96');  
+
+        svg6.append('rect')
+          .attr('x', 110)
+          .attr('y', 70)
+          .attr('width', 144)
+          .attr('height', 30)
+          .attr('fill', '#294B96');
+        
+        svg6.append("text")
+          .attr("x", 290)
+          .attr("y", 90)
+          .text("36%")
+          .style('font-size', '.8em')
+          .style('text-anchor', 'end')
+          .style('font-weight', 'bold')
+          .style('fill', '#294B96');
+ 
+        svg6.append("text")
+          .attr("x", 100)
+          .attr("y", 140)
+          .text("Over one year")
+          .style('font-size', '.8em')
+          .style('text-anchor', 'end')
+          .style('font-weight', 'bold')
+          .style('fill', '#294B96');  
+
+        svg6.append('rect')
+          .attr('x', 110)
+          .attr('y', 120)
+          .attr('width', 144)
+          .attr('height', 30)
+          .attr('fill', '#294B96');
+
+        svg6.append("text")
+          .attr("x", 290)
+          .attr("y", 140)
+          .text("36%")
+          .style('font-size', '.8em')
+          .style('text-anchor', 'end')
+          .style('font-weight', 'bold')
+          .style('fill', '#294B96');
+
+        svg6.append("text")
+          .attr("x", 100)
+          .attr("y", 180)
+          .text("Never/")
+          .style('font-size', '.8em')
+          .style('text-anchor', 'end')
+          .style('font-weight', 'bold')
+          .style('fill', '#294B96');  
+        
+        svg6.append("text")
+          .attr("x", 100)
+          .attr("y", 200)
+          .text("I have no idea")
+          .style('font-size', '.8em')
+          .style('text-anchor', 'end')
+          .style('font-weight', 'bold')
+          .style('fill', '#294B96');  
+
+        svg6.append('rect')
+          .attr('x', 110)
+          .attr('y', 170)
+          .attr('width', 40)
+          .attr('height', 30)
+          .attr('fill', '#294B96');
+
+        svg6.append("text")
+          .attr("x", 185)
+          .attr("y", 190)
+          .text("10%")
+          .style('font-size', '.8em')
+          .style('text-anchor', 'end')
+          .style('font-weight', 'bold')
+          .style('fill', '#294B96');
       
     </script>
   </body>
