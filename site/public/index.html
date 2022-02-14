@@ -39,6 +39,7 @@
                   </div>
                   <div class = "col-8 p-3">
                     <p class="card-text">How confident, if at all, would you say you are in the ability of the NHS to deal with those who are ill as a result of getting the Coronavirus?</p>
+                    <div class = "chart-title">Mar 2020 - Feb 2021</div>
                     <div id= "chart"></div>
                     <p>Find out more here: <a href = "https://www.ipsos.com/en-uk/confidence-ability-nhs-deal-covid-19-its-highest-last-june"> https://www.ipsos.com/en-uk/confidence-ability-nhs-deal-covid-19-its-highest-last-june</a></p>
                   </div>
@@ -366,7 +367,7 @@
         .text("Not Confident")
         .attr("alignment-baseline","middle")
         .style('fill', '#294B96');
-        
+
       svg.append('rect')
         .attr('x', 320)
         .attr('y', 80)
@@ -376,7 +377,7 @@
       });
 
       // append the svg object to the body of the page
-      var svg2 = d3.select("#chart3")
+      var svg3 = d3.select("#chart3")
         .append("svg")
         .attr("viewBox", `0 -50 500 400`)
         .append("g")
@@ -387,10 +388,10 @@
       var colors = ["#022355", "#30469c", "#317372", "#224c4e"];
       var myColor = d3.scaleLinear().domain([1,10]).range(["#294B96", "#69b3a2"]);
       
-      let g = svg2.append("g")
+      let g = svg3.append("g")
         .attr("transform", "translate(200,150)");
 
-      svg2.append("text")
+      svg3.append("text")
         .attr("x", 210)
         .attr("y", 100)
         .text("83%")
@@ -400,7 +401,7 @@
         .attr("text-anchor", "middle")
         .style('fill', '#224c4e');
 
-      svg2.append("text")
+      svg3.append("text")
         .attr("x", 200)
         .attr("y", 140)
         .text("in the UK agree")
@@ -410,7 +411,7 @@
         .attr("text-anchor", "middle")
         .style('fill', '#224c4e');
 
-      svg2.append("text")
+      svg3.append("text")
         .attr("x", 200)
         .attr("y", 170)
         .text("they would get")
@@ -420,7 +421,7 @@
         .attr("text-anchor", "middle")
         .style('fill', '#224c4e');
         
-      svg2.append("text")
+      svg3.append("text")
         .attr("x", 200)
         .attr("y", 200)
         .text("a vaccine")
@@ -460,7 +461,7 @@
       
 
       // append the svg object to the body of the page
-      var svg3 = d3.select("#chart4")
+      var svg4 = d3.select("#chart4")
         .append("div")
         .classed("svg-container", true) //container class to make it responsive
         .append("svg")
@@ -473,25 +474,26 @@
           // format the data
         data.forEach(function(d) {
             d.date = parseTime(d.date);
-            d.yes = +d.yes;
+            d.personally = +d.personally;
         });
         
         x.domain(d3.extent(data, function(d) { return d.date; }));
         y.domain([0, 1]);
 
-        svg3.append("path")
+        svg4.append("path")
           .data([data])
           .attr("class", "line-2")
+          .style("stroke", "#4E9B9A")
           .attr("d", valueline3);
 
-        svg3.append("path")
+        svg4.append("path")
           .data([data])
           .attr("class", "line")
           .attr("class", "line-2")
-          .style("stroke", "#4E9B9A")
+          .style("stroke", "#294B96")
           .attr("d", valueline4);
 
-        svg3.append("g")
+        svg4.append("g")
           .attr("class", "axis")
           .attr("transform", "translate(0, 150)")
           .call(d3.axisBottom(x)
@@ -499,8 +501,8 @@
           .tickFormat(d3.timeFormat("%b - %Y")))
           .style('font-size', '.5em');
 
-
-        svg3.append("text")
+        
+        svg4.append("text")
           .attr("x", 0)
           .attr("y", 10)
           .text("% 'very high' + ")
@@ -509,7 +511,7 @@
           .style('font-weight', 'bold')
           .style('fill', '#294B96');
         
-        svg3.append("text")
+        svg4.append("text")
           .attr("x", 0)
           .attr("y", 20)
           .text("% 'high' threat")
@@ -517,6 +519,82 @@
           .style('font-size', '.5em')
           .style('font-weight', 'bold')
           .style('fill', '#294B96');
+
+        // Legend Items:
+        svg4.append('rect')
+          .attr('x', 40)
+          .attr('y', 180)
+          .attr('width', 10)
+          .attr('height', 10)
+          .attr('fill', '#294B96');
+        
+          svg4.append("text")
+          .attr("x", 55)
+          .attr("y", 185)
+          .text("Your Country")
+          .attr("alignment-baseline","middle")
+          .style('font-size', '.5em')
+          .style('font-weight', 'bold')
+          .style('fill', '#294B96'); 
+
+        svg4.append('rect')
+          .attr('x', 140)
+          .attr('y', 180)
+          .attr('width', 10)
+          .attr('height', 10)
+          .attr('fill', '#4E9B9A'); 
+
+
+      // add the dots with tooltips
+      svg4.selectAll("dot")
+        .data(data)
+        .attr("class", "point")
+      .enter().append("circle")
+        .style("stroke", "#294B96")
+        .style("fill", "#294B96")
+        .attr("r", 2)
+        .attr("cx", function(d) { return x(d.date); })
+        .attr("cy", function(d) { return y(d.country); })
+        .on("mouseover", function(event,d) {
+          div.transition()
+            .duration(200)
+            .style("opacity", 3)
+            .style("color", "#294B96");
+          div.html(formatTime(d.date) + "<br/>" + formatPercent(d.country)  +" Your Country")
+            .style("left", (event.pageX) + "px")
+            .style("top", (event.pageY - 28) + "px");
+          })
+        .on("mouseout", function(d) {
+          div.transition()
+            .duration(500)
+            .style("opacity", 0);
+          });
+
+                          // add the dots with tooltips
+      svg4.selectAll("dot")
+        .data(data)
+        .attr("class", "point")
+      .enter().append("circle")
+        .style("stroke", "#4E9B9A")
+        .style("fill", "#4E9B9A")
+        .attr("r", 2)
+        .attr("cx", function(d) { return x(d.date); })
+        .attr("cy", function(d) { return y(d.personally); })
+        .on("mouseover", function(event,d) {
+          div.transition()
+            .duration(200)
+            .style("opacity", 3)
+            .style("color", "#4E9B9A");
+          div.html(formatTime(d.date) + "<br/>" + formatPercent(d.personally)  +" You Personally")
+            .style("left", (event.pageX) + "px")
+            .style("top", (event.pageY - 28) + "px");
+          })
+        .on("mouseout", function(d) {
+          div.transition()
+            .duration(500)
+            .style("opacity", 0);
+          });
+          
       });
       
       

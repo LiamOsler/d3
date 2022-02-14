@@ -107,6 +107,10 @@ img{
 
 /* d3 chart styling: */
 
+.chart-title{
+    text-align: center;
+}
+
 .axis path, .axis line {
     fill: none;
     stroke: none;
@@ -122,7 +126,7 @@ img{
 }
 
 .line-2{
-    stroke-width: 2;
+    stroke-width: 4;
 }
 
 div.tooltip {
